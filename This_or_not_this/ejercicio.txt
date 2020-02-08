@@ -1,0 +1,7 @@
+This or not This!
+
+1_ Revisar todo el código e interpretar que hace cada parte del mismo.
+2_ Completar con lo que corresponda donde está indicado para que el mismo funcione correctamente.
+
+3_ completaste utilizando el This? por qué?
+4_ revisá el código y controlá si se puede hacer un refactoring y proponé los cambios.
