@@ -11,6 +11,22 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
   this.modelo.preguntaAgregada.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  this.modelo.preguntaEliminada.suscribir(function() {
+    contexto.reconstruirLista();
+  }); 
+
+  this.modelo.eliminarTodo.suscribir(function() {
+    contexto.reconstruirLista();
+  }); 
+
+  //this.modelo.preguntasGuardadas.suscribir(function() {
+  //  contexto.reconstruirLista();
+  //});
+
+  this.modelo.preguntaEditada.suscribir(function() {
+    contexto.reconstruirLista();
+  }); 
 };
 
 
@@ -25,8 +41,9 @@ VistaAdministrador.prototype = {
   },
 
   construirElementoPregunta: function(pregunta){
-    var contexto = this;
-    var nuevoItem = $(`<li class= "list-group-item" id="${pregunta.id}"> ${pregunta.textoPregunta} </li>`)
+    //let contexto = this;
+    let nuevoItem = $(`<li class= "list-group-item" id="${pregunta.id}"> ${pregunta.textoPregunta} </li>`)
+    //$(`<li class= "list-group-item" id="${pregunta.id}"> ${pregunta.textoPregunta} </li>`)
     //$(<li></li>.addClass("list-group-item").attr("id", pregunta.id) JQUERY 
     //asignar a nuevoitem un elemento li con clase "list-group-item", id "pregunta.id" y texto "pregunta.textoPregunta"
     //nuevo
@@ -42,22 +59,22 @@ VistaAdministrador.prototype = {
   },
 
   reconstruirLista: function() {
-    var lista = this.elementos.lista;
+    let lista = this.elementos.lista;
     lista.html('');
-    var preguntas = this.modelo.preguntas;
+    let preguntas = this.modelo.getPreguntas();
     for (var i=0;i<preguntas.length;++i){
       lista.append(this.construirElementoPregunta(preguntas[i]));
     }
   } ,
 
   configuracionDeBotones: function(){
-    var e = this.elementos;
-    var contexto = this;
+    let e = this.elementos;
+    let contexto = this;
 
     //asociacion de eventos a boton
     e.botonAgregarPregunta.click(function() {
-      var value = e.pregunta.val();
-      var respuestas = [];
+      let value = e.pregunta.val();
+      let respuestas = [];
 
       $('[name="option[]"]').each(function() {
       respuesta = $(this).val();
@@ -67,6 +84,27 @@ VistaAdministrador.prototype = {
       contexto.controlador.agregarPregunta(value, respuestas);
     });
     //asociar el resto de los botones a eventos
+
+    e.botonBorrarPregunta.click(function(){
+      let id = parseInt($('.list-group-item.active').attr('id'));
+      contexto.limpiarFormulario();
+      contexto.controlador.borrarPregunta(id);
+     
+    }); 
+    
+    e.borrarTodo.click(function(){
+      contexto.controlador.borrarTodo();
+      
+    }); 
+
+    e.botonEditarPregunta.click(function(){
+      let id = parseInt($('.list-group-item.active').attr('id'));
+      let nuevoTexto = prompt("Edita tu pregunta");
+      contexto.controlador.editarPregunta(id, nuevoTexto);
+      
+     
+    }); 
+
   },
 
   limpiarFormulario: function(){
