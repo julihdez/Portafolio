@@ -1,6 +1,3 @@
-/*
- * Vista usuario
- */
 var VistaUsuario = function(modelo, controlador, elementos) {
   this.modelo = modelo;
   this.controlador = controlador;
@@ -8,10 +5,12 @@ var VistaUsuario = function(modelo, controlador, elementos) {
   var contexto = this;
 
   //suscripcion a eventos del modelo
-  this.modelo.preguntaAgregada.suscribir(function() {
-    contexto.reconstruirLista();
-  });
-};
+  this.modelo.preguntaAgregadaEvent.suscribir(() => contexto.reconstruirLista());
+  this.modelo.preguntaEditadaEvent.suscribir(() => contexto.reconstruirLista());
+  this.modelo.preguntaEliminadaEvent.suscribir(()=> contexto.reconstruirLista());
+  this.modelo.eliminarTodoEvent.suscribir(() => contexto.reconstruirLista());
+  this.modelo.agregarVotoEvent.suscribir(() => contexto.dibujarGrafico());
+ };
 
 VistaUsuario.prototype = {
   //muestra la lista por pantalla y agrega el manejo del boton agregar
@@ -19,11 +18,11 @@ VistaUsuario.prototype = {
     this.reconstruirLista();
     var elementos = this.elementos;
     var contexto = this;
-    
+
     elementos.botonAgregar.click(function() {
-      contexto.agregarVotos(); 
+      contexto.agregarVotos();
     });
-      
+
     this.reconstruirGrafico();
   },
 
@@ -45,15 +44,16 @@ VistaUsuario.prototype = {
 
   reconstruirLista: function() {
     var listaPreguntas = this.elementos.listaPreguntas;
-    listaPreguntas.html('');
+   // listaPreguntas.html('');
     var contexto = this;
     var preguntas = this.modelo.preguntas;
     preguntas.forEach(function(clave){
       //completar
+      listaPreguntas.append($(`<div id="${clave.id}"> ${clave.textoPregunta} </div>`))
       //agregar a listaPreguntas un elemento div con valor "clave.textoPregunta", texto "clave.textoPregunta", id "clave.id"
       var respuestas = clave.cantidadPorRespuesta;
       contexto.mostrarRespuestas(listaPreguntas,respuestas, clave);
-    })
+    });
   },
 
   //muestra respuestas
@@ -82,7 +82,7 @@ VistaUsuario.prototype = {
       });
   },
 
-  dibujarGrafico: function(nombre, respuestas){
+  dibujarGrafico: function(nombre,respuestas){
     var seVotoAlgunaVez = false;
     for(var i=1;i<respuestas.length;++i){
       if(respuestas[i][1]>0){

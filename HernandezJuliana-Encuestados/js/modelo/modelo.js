@@ -1,42 +1,37 @@
 /*
  * Modelo
  */
-var Modelo = function() {
+const Modelo = function() {
+  // this.preguntas = JSON.parse(localStorage.getItem('preguntas')) || [];
   this.preguntas = [];
   this.ultimoId = 0;
 
   //inicializacion de eventos
-  this.preguntaAgregada = new Evento(this);
-  this.preguntaEliminada = new Evento(this);
-  this.eliminarTodo = new Evento(this);
-  //this.preguntasGuardadas = new Evento(this);
-  this.preguntaEditada = new Evento(this);
+  this.preguntaAgregadaEvent = new Evento(this);
+  this.preguntaEliminadaEvent = new Evento(this);
+  this.preguntaEditadaEvent = new Evento(this);
+  this.eliminarTodoEvent = new Evento(this);
+  this.agregarVotoEvent = new Evento(this);
 };
 
 Modelo.prototype = {
-  //se obtiene el id más grande asignado a una pregunta
-
+  
   getPreguntas: function() {
-    if (localStorage != null) {
-      this.preguntas = JSON.parse(localStorage.getItem('preguntasAlmacenadas'));
-    } else {
-      this.preguntas = [];
-    }
+    this.preguntas = JSON.parse(localStorage.getItem('preguntas')) || [];
     return this.preguntas;
   },
- 
-  obtenerUltimoId: function () {
-    
-    ultimoId = -1;
-    for (var i = 0; i < this.preguntas.length; i++) {
+  
+  //se obtiene el id más grande asignado a una pregunta
+  obtenerUltimoId: function() {
+   let ultimoId = -1;
+    for (let i = 0; i < this.preguntas.length; i++) {
         if (this.preguntas[i].id > ultimoId) {
             ultimoId = this.preguntas[i].id;
         }
     }
     return ultimoId;
-
-},
-
+  },
+  
   //se agrega una pregunta dado un nombre y sus respuestas
   agregarPregunta: function(nombre, respuestas) {
     let id = this.obtenerUltimoId();
@@ -44,37 +39,46 @@ Modelo.prototype = {
     let nuevaPregunta = {'textoPregunta': nombre, 'id': id, 'cantidadPorRespuesta': respuestas};
     this.preguntas.push(nuevaPregunta);
     this.guardar();
-    this.preguntaAgregada.notificar();
+    this.preguntaAgregadaEvent.notificar();
   },
 
   //se guardan las preguntas
   guardar: function(){
-    let preguntasParaGuardar = JSON.stringify(this.preguntas);
-    localStorage.setItem("preguntasAlmacenadas", preguntasParaGuardar);
-    //this.preguntasGuardadas.notificar();
+    let preguntasParaGuardar = JSON.stringify(this.preguntas) || "[]";
+    localStorage.setItem('preguntas', preguntasParaGuardar);
   },
 
-  borrarPregunta: function(id) {
+  borrarPregunta: function(id){
     this.preguntas.splice(id, 1);
     this.guardar();
-    this.preguntaEliminada.notificar();
-  },
-    
-    
+    this.preguntaEliminadaEvent.notificar();
+},
 
-  borrarTodo: function() {
-    this.preguntas = localStorage.setItem("preguntasAlmacenadas", []);
+  editarPregunta: function(id, nuevoTexto){
+    let preguntaOriginal = JSON.parse(localStorage.getItem('preguntas')).filter(p => p.id == id);
+    let nuevaPregunta = preguntaOriginal[0];
+    nuevaPregunta.textoPregunta = nuevoTexto;
+    this.preguntas.splice(id, 1, nuevaPregunta);
     this.guardar();
-    this.eliminarTodo.notificar();
+    this.preguntaEditadaEvent.notificar();
+   },
+
+  borrarTodo: function(){
+    this.preguntas = localStorage.setItem('preguntas', []);
+    this.guardar();
+    this.eliminarTodoEvent.notificar();
   },
 
-  editarPregunta: function(id, nuevoTexto) {
-    this.preguntas.splice(id, 1, nuevoTexto);
-    this.guardar();
-    this.preguntaEditada.notificar();
+  agregarVoto: function(nombrePregunta,respuestaSeleccionada){
+    console.log(`El circuito funciona ${nombrePregunta}`);
+    this.agregarVotoEvent.notificar();
+  },
+}
 
-
-  }
-
-
-};
+/*quitarDelStorageUna: function(id){
+    let preguntasParseadas = JSON.parse(localStorage.getItem("preguntas"));
+    let preguntaABorrar = preguntasParseadas.find((pregunta)=> pregunta.id == id);
+    let preguntasActualizadas = preguntasParseadas.filter(function(pregunta){
+      return pregunta != preguntaABorrar;
+    })
+    localStorage.setItem("preguntas", JSON.stringify(preguntasActualizadas));*/
