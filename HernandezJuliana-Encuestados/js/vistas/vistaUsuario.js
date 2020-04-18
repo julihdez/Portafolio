@@ -1,3 +1,6 @@
+/*
+ * Vista usuario
+ */
 var VistaUsuario = function(modelo, controlador, elementos) {
   this.modelo = modelo;
   this.controlador = controlador;
@@ -5,11 +8,7 @@ var VistaUsuario = function(modelo, controlador, elementos) {
   var contexto = this;
 
   //suscripcion a eventos del modelo
-  this.modelo.preguntaAgregadaEvent.suscribir(() => contexto.reconstruirLista());
-  this.modelo.preguntaEditadaEvent.suscribir(() => contexto.reconstruirLista());
-  this.modelo.preguntaEliminadaEvent.suscribir(()=> contexto.reconstruirLista());
-  this.modelo.eliminarTodoEvent.suscribir(() => contexto.reconstruirLista());
-  this.modelo.agregarVotoEvent.suscribir(() => contexto.dibujarGrafico());
+  this.modelo.agregarVotoEvent.suscribir(() => contexto.reconstruirGrafico());
  };
 
 VistaUsuario.prototype = {
@@ -30,8 +29,8 @@ VistaUsuario.prototype = {
   reconstruirGrafico: function(){
     var contexto = this;
     //obtiene las preguntas del local storage
-    var preguntas = this.modelo.preguntas;
-    preguntas.forEach(function(clave){
+    var preguntas = this.modelo.getPreguntas();
+    preguntas.forEach(function(clave){ 
       var listaParaGrafico = [[clave.textoPregunta, 'Cantidad']];
       var respuestas = clave.cantidadPorRespuesta;
       respuestas.forEach (function(elemento) {
@@ -44,12 +43,12 @@ VistaUsuario.prototype = {
 
   reconstruirLista: function() {
     var listaPreguntas = this.elementos.listaPreguntas;
-   // listaPreguntas.html('');
+    listaPreguntas.html('');
     var contexto = this;
     var preguntas = this.modelo.preguntas;
     preguntas.forEach(function(clave){
       //completar
-      listaPreguntas.append($(`<div id="${clave.id}"> ${clave.textoPregunta} </div>`))
+      listaPreguntas.append($(`<div id="${clave.id}" value="${clave.textoPregunta}"> ${clave.textoPregunta} </div>`))
       //agregar a listaPreguntas un elemento div con valor "clave.textoPregunta", texto "clave.textoPregunta", id "clave.id"
       var respuestas = clave.cantidadPorRespuesta;
       contexto.mostrarRespuestas(listaPreguntas,respuestas, clave);
@@ -82,7 +81,7 @@ VistaUsuario.prototype = {
       });
   },
 
-  dibujarGrafico: function(nombre,respuestas){
+  dibujarGrafico: function(nombre, respuestas){
     var seVotoAlgunaVez = false;
     for(var i=1;i<respuestas.length;++i){
       if(respuestas[i][1]>0){
