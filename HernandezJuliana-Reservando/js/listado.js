@@ -46,19 +46,21 @@ Listado.prototype.obtenerRubro = function() {
 
 Listado.prototype.obtenerHorarios = function() {
 
-    let arregloHorarios = crearNuevosArreglos(this.restaurantes,'horarios');
-
-    let nuevoArregloHorarios = [];
+    
+    let arregloHorarios = this.restaurantes.map(restaurantes => restaurantes.horarios);
+    
+    let horarios = [];
     arregloHorarios.forEach(function(hora) {
         hora.forEach(function(nuevoHorario) {
-            nuevoArregloHorarios.push(nuevoHorario)
+            horarios.push(nuevoHorario)
         });
     });
-
-    let horariosFiltrados = resultadosFiltrados(nuevoArregloHorarios);
-
+        
+    let horariosFiltrados = horarios.filter(valoresSinRepetir);
+    
     return horariosFiltrados.sort();
-}
+    }    
+    
 
 
 Listado.prototype.obtenerRestaurantes = function(filtroRubro, filtroCiudad, filtroHorario) {
