@@ -70,8 +70,26 @@ Modelo.prototype = {
   },
 
   agregarVoto: function(nombrePregunta,respuestaSeleccionada){
-    console.log(`El circuito funciona ${nombrePregunta}`);
+    console.log(nombrePregunta,respuestaSeleccionada);
+    let preguntaDelLocalStorage = JSON.parse(localStorage.getItem('preguntas'));
+    
+    let preguntaSeleccionada = preguntaDelLocalStorage.find(p => p.textoPregunta == nombrePregunta);
+    
+    let respuestaElegida = preguntaSeleccionada.cantidadPorRespuesta
+    
+    let respuestaParaSumar = respuestaElegida.find(r => r.textoRespuesta == respuestaSeleccionada);
+    
+    console.log(respuestaParaSumar);
+    
+    respuestaParaSumar.cantidad+=1;
+
+    console.log(preguntaDelLocalStorage);
+
+    localStorage.setItem("preguntas", JSON.stringify(preguntaDelLocalStorage));
+    
+
     this.agregarVotoEvent.notificar();
+
   },
 }
 
@@ -81,4 +99,20 @@ Modelo.prototype = {
     let preguntasActualizadas = preguntasParseadas.filter(function(pregunta){
       return pregunta != preguntaABorrar;
     })
-    localStorage.setItem("preguntas", JSON.stringify(preguntasActualizadas));*/
+    localStorage.setItem("preguntas", JSON.stringify(preguntasActualizadas));
+    agregarVoto: function(nombrePregunta,respuestaSeleccionada){
+    console.log(nombrePregunta,respuestaSeleccionada);
+    let preguntaDellocalStorage = JSON.parse(localStorage.getItem('preguntas')).filter(p => p.textoPregunta == nombrePregunta);
+    
+    let preguntaSeleccionada = preguntaDellocalStorage[0];
+    
+    let respuestaElegida = preguntaSeleccionada.cantidadPorRespuesta.filter(r => r.textoRespuesta == respuestaSeleccionada)
+    
+    let respuestaParaSumar = respuestaElegida[0];
+    console.log(respuestaParaSumar);
+    respuestaParaSumar.cantidad++;
+
+    this.agregarVotoEvent.notificar();
+
+  },
+    */
