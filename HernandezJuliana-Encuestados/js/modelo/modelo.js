@@ -15,14 +15,12 @@ const Modelo = function() {
 };
 
 Modelo.prototype = {
-  
-  getPreguntas: function() {
+  getPreguntas: function(){
     this.preguntas = JSON.parse(localStorage.getItem('preguntas')) || [];
     return this.preguntas;
   },
-  
   //se obtiene el id más grande asignado a una pregunta
-  obtenerUltimoId: function() {
+  obtenerUltimoId: function () {
    let ultimoId = -1;
     for (let i = 0; i < this.preguntas.length; i++) {
         if (this.preguntas[i].id > ultimoId) {
@@ -31,7 +29,6 @@ Modelo.prototype = {
     }
     return ultimoId;
   },
-  
   //se agrega una pregunta dado un nombre y sus respuestas
   agregarPregunta: function(nombre, respuestas) {
     let id = this.obtenerUltimoId();
@@ -70,49 +67,13 @@ Modelo.prototype = {
   },
 
   agregarVoto: function(nombrePregunta,respuestaSeleccionada){
-    console.log(nombrePregunta,respuestaSeleccionada);
     let preguntaDelLocalStorage = JSON.parse(localStorage.getItem('preguntas'));
-    
     let preguntaSeleccionada = preguntaDelLocalStorage.find(p => p.textoPregunta == nombrePregunta);
-    
     let respuestaElegida = preguntaSeleccionada.cantidadPorRespuesta
-    
     let respuestaParaSumar = respuestaElegida.find(r => r.textoRespuesta == respuestaSeleccionada);
-    
-    console.log(respuestaParaSumar);
-    
     respuestaParaSumar.cantidad+=1;
 
-    console.log(preguntaDelLocalStorage);
-
     localStorage.setItem("preguntas", JSON.stringify(preguntaDelLocalStorage));
-    
-
     this.agregarVotoEvent.notificar();
-
   },
 }
-
-/*quitarDelStorageUna: function(id){
-    let preguntasParseadas = JSON.parse(localStorage.getItem("preguntas"));
-    let preguntaABorrar = preguntasParseadas.find((pregunta)=> pregunta.id == id);
-    let preguntasActualizadas = preguntasParseadas.filter(function(pregunta){
-      return pregunta != preguntaABorrar;
-    })
-    localStorage.setItem("preguntas", JSON.stringify(preguntasActualizadas));
-    agregarVoto: function(nombrePregunta,respuestaSeleccionada){
-    console.log(nombrePregunta,respuestaSeleccionada);
-    let preguntaDellocalStorage = JSON.parse(localStorage.getItem('preguntas')).filter(p => p.textoPregunta == nombrePregunta);
-    
-    let preguntaSeleccionada = preguntaDellocalStorage[0];
-    
-    let respuestaElegida = preguntaSeleccionada.cantidadPorRespuesta.filter(r => r.textoRespuesta == respuestaSeleccionada)
-    
-    let respuestaParaSumar = respuestaElegida[0];
-    console.log(respuestaParaSumar);
-    respuestaParaSumar.cantidad++;
-
-    this.agregarVotoEvent.notificar();
-
-  },
-    */

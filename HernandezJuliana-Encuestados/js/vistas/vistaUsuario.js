@@ -29,8 +29,8 @@ VistaUsuario.prototype = {
   reconstruirGrafico: function(){
     var contexto = this;
     //obtiene las preguntas del local storage
-    var preguntas = this.modelo.preguntas;
-    preguntas.forEach(function(clave){ 
+    var preguntas = this.modelo.getPreguntas();
+    preguntas.forEach(function(clave){
       var listaParaGrafico = [[clave.textoPregunta, 'Cantidad']];
       var respuestas = clave.cantidadPorRespuesta;
       respuestas.forEach (function(elemento) {
@@ -48,7 +48,7 @@ VistaUsuario.prototype = {
     var preguntas = this.modelo.preguntas;
     preguntas.forEach(function(clave){
       //completar
-      listaPreguntas.append($(`<div id="${clave.id}" value="${clave.textoPregunta}"> ${clave.textoPregunta} </div>`))
+      listaPreguntas.append($(`<div id="${clave.id}" value ="${clave.textoPregunta}"> ${clave.textoPregunta} </div>`));
       //agregar a listaPreguntas un elemento div con valor "clave.textoPregunta", texto "clave.textoPregunta", id "clave.id"
       var respuestas = clave.cantidadPorRespuesta;
       contexto.mostrarRespuestas(listaPreguntas,respuestas, clave);
@@ -77,7 +77,6 @@ VistaUsuario.prototype = {
         var id = $(this).attr('id');
         var respuestaSeleccionada = $('input[name=' + id + ']:checked').val();
         $('input[name=' + id + ']').prop('checked',false);
-        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
 
         if(respuestaSeleccionada){
           contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
