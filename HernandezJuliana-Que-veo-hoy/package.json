@@ -1,17 +1,24 @@
 {
-  "name": "hernandezjuliana-que-veo-hoy",
+  "name": "que-veo-hoy",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "\"Proyecto numero 09 de Acamica\"",
+  "main": "servidor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Juliana Hernandez",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AzuPeralta/acamica-proyecto-07-queVeoHoy.git"
+  },
+  "author": "Mariela Peralta",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AzuPeralta/acamica-proyecto-07-queVeoHoy/issues"
+  },
+  "homepage": "https://github.com/AzuPeralta/acamica-proyecto-07-queVeoHoy#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mysql": "^2.18.1",
-    "nodemon": "^2.0.3"
+    "mysql": "^2.18.1"
   }
 }

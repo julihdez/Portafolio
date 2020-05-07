@@ -150,7 +150,6 @@ function ControladorRecomendaciones() {
             this.mostrarPelicula(pelicula_mostrar);
         }
     }
-
     //esta funcion recibe una pelicula y se encarga de mostrarla
     this.mostrarPelicula = function(data) {
         $(".pregunta").hide();
@@ -159,7 +158,7 @@ function ControladorRecomendaciones() {
         $(".datos-pelicula .imagen").attr("src", data.poster);
         $(".datos-pelicula .trama").html(data.trama);
         $(".datos-pelicula .titulo").html(data.titulo);
-        $(".datos-pelicula .genero").html(data.nombre);
+        $(".datos-pelicula .genero").html(data.nombre_genero);
 
     }
 
