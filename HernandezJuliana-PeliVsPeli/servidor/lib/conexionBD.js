@@ -8,5 +8,9 @@ var conexion = mysql.createConnection({
   database : 'competencias',
 });
 
+conexion.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
 
 module.exports = conexion;
